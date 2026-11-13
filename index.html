@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080908">
+<title>Gridtype — A study in pixel typography</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{--black:#080908;--ink:#111311;--line:#dedfda;--mono:'DM Mono',monospace;--sans:'Space Grotesk',Manrope,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+button{cursor:pointer}
+.site-head{background:var(--black);color:#fff;padding:0 5.2vw}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff24}
+.wordmark{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:700;letter-spacing:-.04em}
+.mark{width:23px;height:23px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:2px}
+.mark i{display:block;background:#f5f6f1}
+.mark i:nth-child(2),.mark i:nth-child(4),.mark i:nth-child(6),.mark i:nth-child(8){opacity:.35}
+.nav-right{display:flex;align-items:center;gap:30px;color:#b4b8b3;font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.nav-index{color:#6e756f}
+.studio{border-top:1px solid var(--line);padding:42px 5.2vw 72px;min-height:calc(100vh - 76px);background:#fff}
+.studio-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;max-width:1500px;margin:0 auto 28px}
+.section-index{font:10px var(--mono);letter-spacing:.13em;color:#777e77;text-transform:uppercase}
+.studio-head h3{font-size:clamp(34px,4.8vw,58px);font-weight:500;letter-spacing:-.075em;margin:13px 0 0}
+.studio-head p{font:10px var(--mono);color:#747b74;letter-spacing:.1em;text-transform:uppercase;margin:0 0 7px}
+.studio-layout{max-width:1500px;margin:auto;display:grid;grid-template-columns:285px minmax(0,1fr);gap:48px;align-items:start}
+.controls{border-top:1px solid #cfd2cb;max-width:285px}
+.control-section{padding:22px 0;border-bottom:1px solid #cfd2cb}
+.control-title{display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#333a34;margin-bottom:19px}
+.control-title span:last-child{color:#858c84}
+.field{margin-bottom:17px}.field:last-child{margin-bottom:0}
+.label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;font-weight:600;color:#343a35}
+output{font:10px var(--mono);color:#477b52}
+.text-input{width:100%;border:1px solid #d5d8d1;background:#fff;padding:12px 12px;font-size:12px;color:#171b17;outline:none;border-radius:0}
+.text-input:focus{border-color:#4d865a}
+.range{appearance:none;width:100%;height:2px;background:#c9cec7;display:block;margin:15px 0 5px;outline:none}
+.range::-webkit-slider-thumb{appearance:none;width:12px;height:12px;border-radius:50%;background:#1d7138;border:2px solid white;box-shadow:0 0 0 1px #1d7138}
+.range::-moz-range-thumb{width:9px;height:9px;border-radius:50%;background:#1d7138;border:2px solid white;box-shadow:0 0 0 1px #1d7138}
+.presets{display:flex;gap:6px}
+.preset{border:1px solid #cdd1ca;background:transparent;padding:8px 10px;font:10px var(--mono);color:#535b53}
+.preset.active,.preset:hover{background:#111511;color:#fff;border-color:#111511}
+.palette{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.color-item{display:flex;align-items:center;justify-content:space-between;border:1px solid #d8dbd5;padding:7px 9px;background:#fff}
+.color-item span{font:10px var(--mono);color:#60675f}
+.color-item input{width:25px;height:22px;padding:0;border:0;background:none;cursor:pointer}
+.color-item input::-webkit-color-swatch{border:1px solid #d3d6cf;border-radius:0}
+.switches{display:grid;gap:11px;margin-top:17px}
+.toggle{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#424941}
+.toggle input{accent-color:#1b7137}
+.button-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;align-items:flex-start}
+.action{border:1px solid #151915;background:#151915;color:#fff;padding:12px 15px;font-size:11px;font-weight:700;letter-spacing:.02em}
+.action.secondary{background:transparent;color:#171b17;border-color:#bfc5bd}
+.action:hover{opacity:.82}
+.preview-area{min-width:0;position:sticky;top:24px}
+.preview-top{display:flex;justify-content:space-between;align-items:center;padding:0 0 13px;border-bottom:1px solid #d9dcd6;margin-bottom:14px}
+.preview-top span{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#626a62}
+.canvas-shell{background:#f7f9f7;border:1px solid #e5e7e2;padding:10px}
+canvas{display:block;width:100%;height:auto}
+.preview-caption{display:flex;justify-content:space-between;gap:15px;padding-top:12px;color:#777f77;font:9px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.studio-note{font:10px var(--mono);line-height:1.7;color:#777f77}
+.footer{background:#090b09;color:#a2aaa2;padding:25px 5.2vw;display:flex;justify-content:space-between;gap:20px;font:9px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:900px){.studio-layout{grid-template-columns:270px minmax(0,1fr);gap:25px}}
+@media(max-width:680px){.site-head{padding:0 22px}.nav{height:65px}.nav-right{gap:14px;font-size:9px}.nav-right span:last-child{display:none}.studio{padding:34px 20px 55px}.studio-head{display:block}.studio-head p{margin-top:12px}.studio-layout{grid-template-columns:1fr;gap:30px}.controls{max-width:none;order:2}.preview-area{position:static;order:1}.footer{padding:22px;flex-direction:column}.canvas-shell{padding:7px}}
+</style>
+</head>
+<body>
+<header class="site-head">
+<nav class="nav">
+<div class="wordmark"><span class="mark"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>GRIDTYPE</div>
+<div class="nav-right"><span class="nav-index">STUDIO / 001</span><span>PIXEL TYPOGRAPHY</span><span>100% LOCAL</span></div>
+</nav>
+</header>
+<main>
+<section class="studio" id="studio">
+<div class="studio-head"><div><div class="section-index">GRIDTYPE / STUDIO</div><h3>Pixel typography.</h3></div><p>1200 × 675 PX</p></div>
+<div class="studio-layout">
+<aside class="controls">
+<div class="control-section">
+<div class="control-title"><span>Typography</span><span>01 / TYPE</span></div>
+<div class="field"><div class="label-row"><label for="line1">First line</label><output>LINE 01</output></div><input class="text-input" id="line1" maxlength="24" value="LESS TALK"></div>
+<div class="field"><div class="label-row"><label for="line2">Second line</label><output>LINE 02</output></div><input class="text-input" id="line2" maxlength="24" value="MORE SYSTEMS"></div>
+<div class="field"><div class="label-row"><label for="fontScale">Letter scale</label><output id="fontScaleOut">1×</output></div><input class="range" id="fontScale" type="range" min="1" max="3" value="1"></div>
+<div class="field"><div class="label-row"><label for="lineGap">Line spacing</label><output id="lineGapOut">4 cells</output></div><input class="range" id="lineGap" type="range" min="1" max="10" value="4"></div>
+</div>
+<div class="control-section">
+<div class="control-title"><span>Grid geometry</span><span>02 / GRID</span></div>
+<div class="field"><div class="label-row"><label for="cell">Cell size</label><output id="cellOut">9 px</output></div><input class="range" id="cell" type="range" min="5" max="18" value="9"></div>
+<div class="field"><div class="label-row"><label for="gap">Cell spacing</label><output id="gapOut">4 px</output></div><input class="range" id="gap" type="range" min="1" max="9" value="4"></div>
+<div class="field"><div class="label-row"><label for="noise">Ambient cells</label><output id="noiseOut">7%</output></div><input class="range" id="noise" type="range" min="0" max="25" value="7"></div>
+<div class="field"><div class="label-row"><label for="round">Corner radius</label><output id="roundOut">2 px</output></div><input class="range" id="round" type="range" min="0" max="5" value="2"></div>
+</div>
+<div class="control-section">
+<div class="control-title"><span>Color system</span><span>03 / COLOR</span></div>
+<div class="presets"><button class="preset active" data-preset="moss">Moss</button><button class="preset" data-preset="mono">Monochrome</button><button class="preset" data-preset="night">Night</button></div>
+<div class="palette">
+<div class="color-item"><span>Background</span><input id="bg" type="color" value="#f7f9f7"></div>
+<div class="color-item"><span>Grid</span><input id="grid" type="color" value="#e2e7e4"></div>
+<div class="color-item"><span>Lettering</span><input id="ink" type="color" value="#11702f"></div>
+<div class="color-item"><span>Soft green</span><input id="soft" type="color" value="#bee7c7"></div>
+<div class="color-item"><span>Mid green</span><input id="mid" type="color" value="#96d7a6"></div>
+<div class="color-item"><span>Accent</span><input id="accent" type="color" value="#e8534b"></div>
+</div>
+<div class="switches">
+<label class="toggle">Ambient cells <input id="noiseOn" type="checkbox" checked></label>
+<label class="toggle">Accent pixel <input id="showAccent" type="checkbox" checked></label>
+<label class="toggle">Transparent background <input id="transparent" type="checkbox"></label>
+</div>
+<div class="button-row"><button class="action secondary" id="reset">Reset settings</button><button class="action" id="shuffle">Regenerate pattern ↻</button></div>
+</div>
+</aside>
+<div class="preview-area">
+<div class="preview-top"><span>Live output</span><span id="dimensions">1200 × 675 PX</span></div>
+<div class="canvas-shell"><canvas id="art" width="1200" height="675" role="img" aria-label="Pixel typography composition"></canvas></div>
+<div class="preview-caption"><span>Bitmap typography · Cell-aligned</span><span id="fitNote">Scale 1×</span></div>
+<div class="button-row"><button class="action" id="download">Export PNG ↗</button><button class="action secondary" id="downloadSvg">Export SVG ↗</button><span class="studio-note">Your work stays in this browser.<br>No account. No upload. No server.</span></div>
+</div>
+</div>
+</section>
+</main>
+<footer class="footer"><span>GRIDTYPE — A STUDY IN PIXEL TYPOGRAPHY</span><span>DESIGNED TO MAKE IDEAS VISIBLE · 2026</span></footer>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),canvas=$('art'),ctx=canvas.getContext('2d');
+const glyphs={
+A:['01110','10001','10001','11111','10001','10001','10001'],B:['11110','10001','10001','11110','10001','10001','11110'],C:['01111','10000','10000','10000','10000','10000','01111'],D:['11110','10001','10001','10001','10001','10001','11110'],E:['11111','10000','10000','11110','10000','10000','11111'],F:['11111','10000','10000','11110','10000','10000','10000'],G:['01111','10000','10000','10111','10001','10001','01111'],H:['10001','10001','10001','11111','10001','10001','10001'],I:['11111','00100','00100','00100','00100','00100','11111'],J:['00111','00010','00010','00010','10010','10010','01100'],K:['10001','10010','10100','11000','10100','10010','10001'],L:['10000','10000','10000','10000','10000','10000','11111'],M:['10001','11011','10101','10101','10001','10001','10001'],N:['10001','11001','10101','10011','10001','10001','10001'],O:['01110','10001','10001','10001','10001','10001','01110'],P:['11110','10001','10001','11110','10000','10000','10000'],Q:['01110','10001','10001','10001','10101','10010','01101'],R:['11110','10001','10001','11110','10100','10010','10001'],S:['01111','10000','10000','01110','00001','00001','11110'],T:['11111','00100','00100','00100','00100','00100','00100'],U:['10001','10001','10001','10001','10001','10001','01110'],V:['10001','10001','10001','10001','10001','01010','00100'],W:['10001','10001','10001','10101','10101','10101','01010'],X:['10001','10001','01010','00100','01010','10001','10001'],Y:['10001','10001','01010','00100','00100','00100','00100'],Z:['11111','00001','00010','00100','01000','10000','11111'],
+'0':['01110','10001','10011','10101','11001','10001','01110'],'1':['00100','01100','00100','00100','00100','00100','01110'],'2':['01110','10001','00001','00010','00100','01000','11111'],'3':['11110','00001','00001','01110','00001','00001','11110'],'4':['00010','00110','01010','10010','11111','00010','00010'],'5':['11111','10000','10000','11110','00001','00001','11110'],'6':['01110','10000','10000','11110','10001','10001','01110'],'7':['11111','00001','00010','00100','01000','01000','01000'],'8':['01110','10001','10001','01110','10001','10001','01110'],'9':['01110','10001','10001','01111','00001','00001','01110'],
+'.':['00000','00000','00000','00000','00000','00110','00110'],',':['00000','00000','00000','00000','00110','00110','00100'],':':['00000','00110','00110','00000','00110','00110','00000'],'!':['00100','00100','00100','00100','00100','00000','00100'],'?':['01110','10001','00001','00010','00100','00000','00100'],'-':['00000','00000','00000','11111','00000','00000','00000'],'+':['00000','00100','00100','11111','00100','00100','00000'],'/':['00001','00010','00010','00100','01000','01000','10000'],'&':['01100','10010','10100','01000','10101','10010','01101'],'#':['01010','11111','01010','01010','11111','01010','00000'],
+"'":['00100','00100','00100','00000','00000','00000','00000'],'"':['01010','01010','01010','00000','00000','00000','00000'],'(':['00010','00100','01000','01000','01000','00100','00010'],')':['01000','00100','00010','00010','00010','00100','01000'],'[':['01110','01000','01000','01000','01000','01000','01110'],']':['01110','00010','00010','00010','00010','00010','01110'],'@':['01110','10001','10111','10101','10111','10000','01110'],'%':['11000','11001','00010','00100','01000','10011','00011'],'$':['00100','01111','10100','01110','00101','11110','00100'],'*':['00000','10101','01110','11111','01110','10101','00000'],'=':['00000','00000','11111','00000','11111','00000','00000'],'_':['00000','00000','00000','00000','00000','00000','11111'],'<':['00010','00100','01000','10000','01000','00100','00010'],'>':['01000','00100','00010','00001','00010','00100','01000'],'^':['00100','01010','10001','00000','00000','00000','00000'],'~':['00000','00000','01001','10110','00000','00000','00000'],'|':['00100','00100','00100','00100','00100','00100','00100'],';':['00000','00110','00110','00000','00110','00110','00100'],' ':['00000','00000','00000','00000','00000','00000','00000']
+};
+const defaults={line1:'LESS TALK',line2:'MORE SYSTEMS',fontScale:1,lineGap:4,cell:9,gap:4,noise:7,round:2,bg:'#f7f9f7',grid:'#e2e7e4',ink:'#11702f',soft:'#bee7c7',mid:'#96d7a6',accent:'#e8534b',noiseOn:true,showAccent:true,transparent:false};
+const colorKeys=['bg','grid','ink','soft','mid','accent'];
+const presets={
+moss:{bg:'#f7f9f7',grid:'#e2e7e4',ink:'#11702f',soft:'#bee7c7',mid:'#96d7a6',accent:'#e8534b'},
+mono:{bg:'#f5f5f2',grid:'#e2e2de',ink:'#222824',soft:'#c9cfca',mid:'#a8b0aa',accent:'#b48b53'},
+night:{bg:'#101713',grid:'#29362e',ink:'#e3f3e6',soft:'#385e43',mid:'#5c9368',accent:'#f08a58'}
+};
+const storeKey='gridtype.v1';
+let seed=42,pending=false,saveTimer=null;
+const get=id=>{const el=$(id);return el.type==='checkbox'?el.checked:el.value};
+const set=(id,v)=>{const el=$(id);if(el.type==='checkbox')el.checked=v;else el.value=v};
+const rand=n=>{const x=Math.sin(n*127.1+seed*311.7)*43758.5453;return x-Math.floor(x)};
+const stamp=()=>{const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`};
+function saveState(){try{const s={seed};Object.keys(defaults).forEach(k=>s[k]=get(k));localStorage.setItem(storeKey,JSON.stringify(s))}catch(e){}}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveState,300)}
+function loadState(){try{const s=JSON.parse(localStorage.getItem(storeKey)||'null');if(!s)return;Object.keys(defaults).forEach(k=>{if(k in s)set(k,s[k])});if(typeof s.seed==='number')seed=s.seed}catch(e){}}
+function syncPreset(){const match=Object.keys(presets).find(p=>colorKeys.every(k=>get(k)===presets[p][k]));document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',b.dataset.preset===match))}
+function layout(lines,cols,requested){
+const items=lines.filter(l=>l.trim()).map(l=>{const chars=[...l.toUpperCase()];return{chars,units:chars.reduce((n,ch)=>n+(ch===' '?4:6),0)}});
+if(!items.length)return[];
+const widest=Math.max(...items.map(i=>i.units));
+const scale=Math.max(1,Math.min(requested,Math.floor((cols-4)/Math.max(1,widest))));
+items.forEach(i=>{i.scale=scale;i.width=i.units*scale;i.height=7*scale});
+return items;
+}
+function build(){
+const W=canvas.width,H=canvas.height,cell=+get('cell'),gap=+get('gap'),pitch=cell+gap;
+const cols=Math.floor((W-36+gap)/pitch),rows=Math.floor((H-32+gap)/pitch);
+const x0=Math.floor((W-(cols*pitch-gap))/2),y0=Math.floor((H-(rows*pitch-gap))/2);
+const requested=+get('fontScale'),lineGap=+get('lineGap');
+const items=layout([get('line1'),get('line2')],cols,requested);
+const totalH=items.reduce((n,l)=>n+l.height,0)+Math.max(0,items.length-1)*lineGap;
+let y=Math.max(0,Math.floor((rows-totalH)/2));
+const active=new Set();
+for(const it of items){
+let x=Math.max(0,Math.floor((cols-it.width)/2));
+for(const ch of it.chars){
+if(ch===' '){x+=4*it.scale;continue}
+const pattern=glyphs[ch]||glyphs[' '];
+for(let gy=0;gy<7;gy++)for(let gx=0;gx<5;gx++)if(pattern[gy][gx]==='1')for(let sy=0;sy<it.scale;sy++)for(let sx=0;sx<it.scale;sx++){const px=x+gx*it.scale+sx,py=y+gy*it.scale+sy;if(px>=0&&px<cols&&py>=0&&py<rows)active.add(py*cols+px)}
+x+=6*it.scale;
+}
+y+=it.height+lineGap;
+}
+const noise=get('noiseOn')?+get('noise')/100:0,rad=+get('round'),showAccent=get('showAccent');
+const colors={bg:get('bg'),grid:get('grid'),ink:get('ink'),soft:get('soft'),mid:get('mid'),accent:get('accent')};
+const cells=[];
+for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+const i=r*cols+c,n=rand(i);
+let color=colors.grid;
+if(active.has(i))color=colors.ink;
+else if(n<noise*.72)color=colors.soft;
+else if(n<noise)color=colors.mid;
+if(showAccent&&r===Math.floor(rows*.79)&&c===Math.floor(cols*.945))color=colors.accent;
+cells.push({x:x0+c*pitch,y:y0+r*pitch,color});
+}
+return {cells,cell,rad,colors,scale:items.length?items[0].scale:1,clamped:items.length>0&&items[0].scale<requested};
+}
+function draw(){
+$('fontScaleOut').textContent=get('fontScale')+'×';
+$('lineGapOut').textContent=get('lineGap')+' cells';
+$('cellOut').textContent=get('cell')+' px';
+$('gapOut').textContent=get('gap')+' px';
+$('noiseOut').textContent=get('noise')+'%';
+$('roundOut').textContent=get('round')+' px';
+colorKeys.forEach(k=>{$(k).title=$(k).value});
+const b=build(),W=canvas.width,H=canvas.height;
+ctx.clearRect(0,0,W,H);
+if(!get('transparent')){ctx.fillStyle=b.colors.bg;ctx.fillRect(0,0,W,H)}
+const rad=Math.min(b.rad,b.cell/2);
+if(rad<=0){for(const c of b.cells){ctx.fillStyle=c.color;ctx.fillRect(c.x,c.y,b.cell,b.cell)}}
+else{for(const c of b.cells){ctx.fillStyle=c.color;ctx.beginPath();ctx.roundRect(c.x,c.y,b.cell,b.cell,rad);ctx.fill()}}
+$('dimensions').textContent=`${W} × ${H} PX`;
+$('fitNote').textContent=b.clamped?`Auto-fit ${b.scale}×`:`Scale ${b.scale}×`;
+const text=[get('line1'),get('line2')].filter(s=>s.trim()).join(' / ');
+canvas.setAttribute('aria-label',`Pixel typography composition reading ${text||'empty'}`);
+scheduleSave();
+}
+function requestDraw(){if(pending)return;pending=true;requestAnimationFrame(()=>{pending=false;draw()})}
+function svgMarkup(){
+const b=build(),rx=Math.min(b.rad,b.cell/2),parts=[];
+if(!get('transparent'))parts.push(`<rect width="${canvas.width}" height="${canvas.height}" fill="${b.colors.bg}"/>`);
+for(const c of b.cells)parts.push(`<rect x="${c.x}" y="${c.y}" width="${b.cell}" height="${b.cell}" rx="${rx}" fill="${c.color}"/>`);
+return `<svg xmlns="http://www.w3.org/2000/svg" width="${canvas.width}" height="${canvas.height}" viewBox="0 0 ${canvas.width} ${canvas.height}" shape-rendering="crispEdges">${parts.join('')}</svg>`;
+}
+function saveBlob(name,blob){const url=URL.createObjectURL(blob),a=document.createElement('a');a.download=name;a.href=url;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function saveData(name,data){const a=document.createElement('a');a.download=name;a.href=data;a.click()}
+Object.keys(defaults).forEach(id=>{const el=$(id);el.addEventListener('input',requestDraw);el.addEventListener('change',requestDraw)});
+$('download').onclick=()=>saveData(`gridtype-${stamp()}.png`,canvas.toDataURL('image/png'));
+$('downloadSvg').onclick=()=>saveBlob(`gridtype-${stamp()}.svg`,new Blob([svgMarkup()],{type:'image/svg+xml'}));
+$('shuffle').onclick=()=>{seed=Math.floor(Math.random()*1e6);draw()};
+$('reset').onclick=()=>{Object.entries(defaults).forEach(([id,v])=>set(id,v));seed=42;syncPreset();draw()};
+document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>{Object.entries(presets[b.dataset.preset]).forEach(([id,v])=>set(id,v));syncPreset();draw()});
+loadState();
+syncPreset();
+draw();
+})();
+</script>
+</body>
+</html>

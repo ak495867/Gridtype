@@ -1,0 +1,35 @@
+:root {
+  --black: #080908;
+  --white: #f8f8f5;
+  --paper: #fff;
+  --ink: #111311;
+  --muted: #737873;
+  --line: #dedfda;
+  --green: #176b35;
+  --soft: #c8e8ce;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Grotesk', 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
